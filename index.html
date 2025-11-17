@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPFTS - Only Privacy Focused Tech Stuff</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-primary: #050505;
+            --bg-panel: #0b0b0f;
+            --bg-panel-alt: #0f1118;
+            --accent: #644cff;
+            --accent-soft: rgba(100, 76, 255, 0.18);
+            --text-primary: #f4f6ff;
+            --text-secondary: #a6acce;
+            --border: rgba(148, 139, 255, 0.2);
+            --card-shadow: 0 30px 60px rgba(8, 9, 16, 0.55);
+            --max-width: 1080px;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 20%, rgba(100, 76, 255, 0.12), transparent 55%),
+                        radial-gradient(circle at 80% 10%, rgba(76, 217, 255, 0.1), transparent 50%),
+                        var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:hover,
+        a:focus {
+            color: var(--accent);
+        }
+
+        /* Header Styles */
+        .site-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            background: linear-gradient(180deg, rgba(5, 5, 5, 0.9) 0%, rgba(5, 5, 5, 0) 100%);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1.2rem 1.8rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            color: var(--accent);
+            position: relative;
+            padding: 0.35rem 0.45rem;
+            border-radius: 10px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .brand img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            filter: drop-shadow(0 0 10px rgba(100, 76, 255, 0.3));
+            object-fit: cover;
+        }
+
+        .brand span {
+            font-size: 1.5rem;
+        }
+
+        .brand::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0.2rem;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(120deg, rgba(100, 76, 255, 0), rgba(100, 76, 255, 0.6), rgba(118, 218, 255, 0));
+            transform: scaleX(0.4);
+            opacity: 0;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        .brand:hover {
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .brand:hover::after {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+
+        .nav__links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav__links a {
+            position: relative;
+            padding: 0.3rem 0;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: color 0.2s ease, transform 0.22s ease;
+        }
+
+        .nav__links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 100%;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(120deg, rgba(100, 76, 255, 0), rgba(100, 76, 255, 0.4), rgba(118, 218, 255, 0));
+            transform: scaleX(0.4);
+            opacity: 0;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+            transform-origin: center;
+        }
+
+        .nav__links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav__links a:hover::after {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            align-items: center;
+            gap: 3rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 8rem 1.8rem 4rem;
+        }
+
+        .hero__eyebrow {
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.75rem, 5vw, 3.6rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #ffffff, var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero__lead {
+            max-width: 36ch;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .hero__actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            border-radius: 999px;
+            padding: 0.85rem 1.8rem;
+            border: 1px solid transparent;
+            font-weight: 600;
+            background: linear-gradient(120deg, var(--accent), #3920ff);
+            color: #020204;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+            cursor: pointer;
+            overflow: hidden;
+            z-index: 0;
+            text-decoration: none;
+            isolation: isolate;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px rgba(81, 60, 255, 0.38);
+        }
+
+        .btn--ghost {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .btn--ghost:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+        }
+
+        .hero__visual {
+            position: relative;
+            min-height: 280px;
+            display: grid;
+            place-items: center;
+        }
+
+        .hero__halo {
+            position: absolute;
+            width: clamp(280px, 42vw, 380px);
+            height: clamp(280px, 42vw, 380px);
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 40%, rgba(100, 76, 255, 0.42), rgba(8, 10, 18, 0.3) 55%, rgba(8, 10, 18, 0) 70%);
+            filter: blur(0.5px);
+            opacity: 0.75;
+            z-index: 0;
+            animation: haloPulse 12s ease-in-out infinite;
+        }
+
+        .hero__sheen {
+            position: absolute;
+            width: clamp(260px, 38vw, 340px);
+            height: clamp(260px, 38vw, 340px);
+            border-radius: 36% 64% 58% 42% / 44% 52% 48% 56%;
+            background:
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.25), transparent 55%),
+                linear-gradient(145deg, rgba(100, 76, 255, 0.36), rgba(76, 217, 255, 0.1));
+            mix-blend-mode: screen;
+            opacity: 0.48;
+            transform: rotate(-18deg);
+            z-index: 0;
+            animation: sheenDrift 14s ease-in-out infinite;
+        }
+
+        .hero__logo {
+            width: clamp(180px, 32vw, 260px);
+            height: clamp(180px, 32vw, 260px);
+            border-radius: 50%;
+            filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.6));
+            z-index: 1;
+            object-fit: cover;
+        }
+
+        /* Sections */
+        .panel {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 6rem 1.8rem;
+        }
+
+        .panel--accent {
+            background: var(--bg-panel);
+            border-radius: 20px;
+            margin-top: 4rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .panel--subtle {
+            background: var(--bg-panel-alt);
+            border-radius: 20px;
+            margin-top: 4rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .panel__intro {
+            max-width: 56ch;
+            margin-bottom: 3rem;
+        }
+
+        .panel__intro h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .panel__intro h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, transparent, var(--accent), transparent);
+        }
+
+        .panel__intro p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* Grids */
+        .grid {
+            display: grid;
+            gap: 1.6rem;
+        }
+
+        .grid--overview {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .grid--features {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        .grid--community {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .grid--projects {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Cards */
+        .card, .feature {
+            background: rgba(8, 10, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:hover, .card:focus-within, .feature:hover, .feature:focus-within {
+            transform: translateY(-4px);
+            border-color: rgba(100, 76, 255, 0.6);
+        }
+
+        .feature__tag {
+            display: inline-flex;
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            padding: 0.3rem 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .project-card {
+            background: rgba(8, 10, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(100, 76, 255, 0.6);
+        }
+
+        .project-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .project-content {
+            padding: 1.8rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: auto;
+            transition: all 0.3s;
+            align-self: flex-start;
+            padding: 0.7rem 1.5rem;
+            border: 2px solid var(--accent);
+            border-radius: 50px;
+        }
+
+        .project-link:hover {
+            background-color: var(--accent);
+            color: var(--bg-primary);
+            transform: translateX(5px);
+        }
+
+        /* Developers */
+        .developers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .developer-card {
+            background: rgba(8, 10, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .developer-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(100, 76, 255, 0.6);
+        }
+
+        .developer-card h4 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .developer-card h4 i {
+            font-size: 1.2rem;
+        }
+
+        .developer-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .developer-links {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .developer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .developer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Contact Section */
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 2rem;
+            background: rgba(8, 10, 18, 0.6);
+            border-radius: 15px;
+            min-width: 200px;
+            transition: transform 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .contact-item a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .contact-item a:hover {
+            color: var(--accent);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        /* Footer */
+        .site-footer {
+            max-width: var(--max-width);
+            margin: 3rem auto 4rem;
+            padding: 0 1.8rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo img {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            filter: drop-shadow(0 0 8px rgba(100, 76, 255, 0.3));
+            object-fit: cover;
+        }
+
+        .footer-logo span {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .credits {
+            text-align: right;
+        }
+
+        .credits p {
+            margin-bottom: 0.5rem;
+        }
+
+        .credits a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .credits a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes haloPulse {
+            0%, 100% {
+                opacity: 0.65;
+                transform: scale(0.94);
+            }
+            50% {
+                opacity: 0.9;
+                transform: scale(1.06);
+            }
+        }
+
+        @keyframes sheenDrift {
+            0%, 100% {
+                transform: rotate(-18deg) translate3d(0, 0, 0);
+            }
+            50% {
+                transform: rotate(-12deg) translate3d(8px, -10px, 0);
+            }
+        }
+
+        /* Page Navigation */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav__links {
+                position: absolute;
+                top: 4.5rem;
+                right: 1.8rem;
+                background: rgba(8, 10, 18, 0.95);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+                flex-direction: column;
+                padding: 1rem 1.4rem;
+                min-width: 200px;
+                gap: 1rem;
+                transform: translateY(-10px);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease, transform 0.2s ease;
+            }
+
+            .nav__links[data-open="true"] {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+
+            .nav__toggle {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: none;
+                color: var(--text-primary);
+                border: 1px solid rgba(255, 255, 255, 0.18);
+                border-radius: 999px;
+                padding: 0.4rem 1rem;
+                transition: border 0.2s ease;
+            }
+
+            .nav__toggle:hover,
+            .nav__toggle:focus {
+                border-color: var(--accent);
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .credits {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="#home">
+                <img src="opfts.png" alt="OPFTS Logo">
+                <span>OPFTS</span>
+            </a>
+            <button class="nav__toggle" aria-expanded="false" aria-controls="primary-navigation">Menu</button>
+            <ul id="primary-navigation" class="nav__links" data-open="false">
+                <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                <li><a href="#" class="nav-link" data-page="projects">Our Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Page -->
+    <section id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero__content">
+                <p class="hero__eyebrow">Only Privacy Focused Tech Stuff</p>
+                <h1>Technology that respects your privacy</h1>
+                <p class="hero__lead">OPFTS is an organization dedicated to creating secure, efficient, and privacy-respecting technology solutions for the modern world.</p>
+                <div class="hero__actions">
+                    <a class="btn" href="#projects">Explore Our Projects</a>
+                    <a class="btn btn--ghost" href="#about">Learn More</a>
+                </div>
+            </div>
+            <div class="hero__visual">
+                <div class="hero__halo" aria-hidden="true"></div>
+                <div class="hero__sheen" aria-hidden="true"></div>
+                <img class="hero__logo" src="opfts.png" alt="OPFTS Logo">
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="panel panel--accent">
+            <div class="panel__intro">
+                <h2>About OPFTS</h2>
+                <p>We believe that technology should serve the user, not exploit them. Our projects are designed with transparency, security, and efficiency as core principles. All our software is open source, allowing for community review and contributions.</p>
+            </div>
+            <div class="developers">
+                <div class="developer-card">
+                    <h4><i class="fas fa-crown"></i> litaliano00</h4>
+                    <p>Founder & Lead Developer</p>
+                    <div class="developer-links">
+                        <a href="https://github.com/litaliano00-dev/" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="https://discord.com/users/litaliano00._" target="_blank">
+                            <i class="fab fa-discord"></i> Discord
+                        </a>
+                    </div>
+                </div>
+                <div class="developer-card">
+                    <h4><i class="fas fa-code"></i> skibiditymus27</h4>
+                    <p>Core Developer</p>
+                    <div class="developer-links">
+                        <a href="https://github.com/skibiditymus27" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="https://discord.com/users/skibiditymus27" target="_blank">
+                            <i class="fab fa-discord"></i> Discord
+                        </a>
+                    </div>
+                </div>
+                <div class="developer-card">
+                    <h4><i class="fas fa-code"></i> whitzscott</h4>
+                    <p>Core Developer</p>
+                    <div class="developer-links">
+                        <a href="https://github.com/whitzzscott" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="https://discord.com/users/whitzscott" target="_blank">
+                            <i class="fab fa-discord"></i> Discord
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Projects -->
+        <section class="panel">
+            <div class="panel__intro">
+                <h2>Featured Projects</h2>
+                <p>A glimpse at some of our privacy-focused technology solutions.</p>
+            </div>
+            <div class="grid grid--projects">
+                <article class="project-card">
+                    <img src="vantaos.jpg" alt="VantaOS" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">VantaOS</h3>
+                        <p class="project-description">A Linux OS made from scratch using Linux kernel and glibc library. Security-focused and not bloated, designed for privacy-conscious users.</p>
+                        <a href="https://github.com/litaliano00-dev/vantaos/" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </article>
+                <article class="project-card">
+                    <img src="ghostshare.png" alt="GhostShare" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">GhostShare</h3>
+                        <p class="project-description">Secure messaging app available on F-Droid, Android APK, Linux, macOS, and Windows (64-bit only). End-to-end encrypted communication.</p>
+                        <a href="https://github.com/litaliano00-dev/ghostshare/" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </section>
+
+    <!-- Projects Page -->
+    <section id="projects" class="page">
+        <section class="hero">
+            <div class="hero__content">
+                <p class="hero__eyebrow">Our Projects</p>
+                <h1>Privacy-Focused Technology</h1>
+                <p class="hero__lead">Explore our complete portfolio of privacy-respecting technology solutions designed with security and efficiency in mind.</p>
+            </div>
+            <div class="hero__visual">
+                <div class="hero__halo" aria-hidden="true"></div>
+                <div class="hero__sheen" aria-hidden="true"></div>
+                <img class="hero__logo" src="opfts.png" alt="OPFTS Logo">
+            </div>
+        </section>
+
+        <section class="panel panel--subtle">
+            <div class="grid grid--projects">
+                <article class="project-card">
+                    <img src="vantaos.jpg" alt="VantaOS" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">VantaOS</h3>
+                        <p class="project-description">A Linux OS made from scratch using Linux kernel and glibc library. Security-focused and not bloated, designed for privacy-conscious users who value performance and security.</p>
+                        <a href="https://github.com/litaliano00-dev/vantaos/" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </article>
+                <article class="project-card">
+                    <img src="vailui.png" alt="VailUI" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">VailUI</h3>
+                        <p class="project-description">A lightweight, not bloated GUI for VantaOS designed for efficiency and user experience. Provides a clean, intuitive interface without compromising performance.</p>
+                        <a href="https://github.com/litaliano00-dev/vailui/" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </article>
+                <article class="project-card">
+                    <img src="vboot.png" alt="VBoot" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">VBoot</h3>
+                        <p class="project-description">Secure fast bootloader for VantaOS, designed for speed and security during system startup. Implements advanced security measures to protect your system.</p>
+                        <a href="https://github.com/litaliano00-dev/vboot/" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </article>
+                <article class="project-card">
+                    <img src="ghostshare.png" alt="GhostShare" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">GhostShare</h3>
+                        <p class="project-description">Secure messaging app available on F-Droid, Android APK, Linux, macOS, and Windows (64-bit only). End-to-end encrypted communication that leaves no traces.</p>
+                        <a href="https://github.com/litaliano00-dev/ghostshare/" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="panel panel--accent">
+        <div class="panel__intro">
+            <h2>Get In Touch</h2>
+            <p>Connect with us to learn more about our projects or get involved in our community.</p>
+        </div>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-envelope contact-icon"></i>
+                <a href="mailto:litaliano00.contact@gmail.com">litaliano00.contact@gmail.com</a>
+            </div>
+            <div class="contact-item">
+                <i class="fab fa-discord contact-icon"></i>
+                <a href="https://discord.gg/dYncdWFYew" target="_blank">Join our Discord Server</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="opfts.png" alt="OPFTS Logo">
+                <span>OPFTS</span>
+            </div>
+            <div class="footer-links">
+                <a href="#" class="nav-link" data-page="home">Home</a>
+                <a href="#" class="nav-link" data-page="projects">Our Projects</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="credits">
+                <p>Website developer: <a href="https://github.com/skibiditymus27/">skibiditymus27</a></p>
+                <p>Owner and founder and main developer: <a href="https://github.com/litaliano00-dev/">litaliano00-dev</a></p>
+                <p>Discord server: <a href="https://discord.gg/dYncdWFYew">https://discord.gg/dYncdWFYew</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetPage = this.getAttribute('data-page');
+                    
+                    // Hide all pages
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // Show target page
+                    document.getElementById(targetPage).classList.add('active');
+                    
+                    // Update URL without page reload
+                    if (targetPage === 'home') {
+                        history.pushState(null, null, ' ');
+                    } else {
+                        history.pushState(null, null, `#${targetPage}`);
+                    }
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', function() {
+                const hash = window.location.hash.substring(1);
+                
+                // Hide all pages
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Show appropriate page based on hash
+                if (hash && document.getElementById(hash)) {
+                    document.getElementById(hash).classList.add('active');
+                } else {
+                    document.getElementById('home').classList.add('active');
+                }
+            });
+            
+            // Check initial URL hash
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                if (hash && document.getElementById(hash)) {
+                    // Hide all pages
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // Show page based on hash
+                    document.getElementById(hash).classList.add('active');
+                }
+            }
+            
+            // Mobile menu toggle
+            const navToggle = document.querySelector('.nav__toggle');
+            const navLinksContainer = document.querySelector('.nav__links');
+            
+            if (navToggle && navLinksContainer) {
+                navToggle.addEventListener('click', () => {
+                    const isOpen = navLinksContainer.getAttribute('data-open') === 'true';
+                    const nextState = !isOpen;
+                    navToggle.setAttribute('aria-expanded', String(nextState));
+                    navLinksContainer.setAttribute('data-open', String(nextState));
+                });
+            }
+        });
+    </script>
+</body>
+  </html>
